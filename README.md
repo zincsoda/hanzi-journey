@@ -52,6 +52,21 @@ The app will be available at `http://localhost:5173`
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build locally
 
+## Deployment
+
+This app is automatically deployed to GitHub Pages when changes are pushed to the main branch.
+
+Live URL: [https://zincsoda.github.io/hanzi-journey/](https://zincsoda.github.io/hanzi-journey/)
+
+### GitHub Pages Setup
+
+The repository is configured to deploy automatically via GitHub Actions. To enable this:
+
+1. Go to your repository settings
+2. Navigate to **Settings** > **Pages**
+3. Under **Build and deployment**, select **Source**: GitHub Actions
+4. Push to the main branch to trigger a deployment
+
 ## Project Structure
 
 ```
