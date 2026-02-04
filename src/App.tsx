@@ -3,7 +3,6 @@ import DetailView from './components/DetailView'
 import HanziCard from './components/HanziCard'
 import OfflineBadge from './components/OfflineBadge'
 import SearchBar from './components/SearchBar'
-import Toggle from './components/Toggle'
 import { useFavorites } from './hooks/useFavorites'
 import { useHanziData } from './hooks/useHanziData'
 import { useOnlineStatus } from './hooks/useOnlineStatus'
@@ -20,13 +19,12 @@ const App = () => {
   const [view, setView] = useState<View>('list')
   const [returnView, setReturnView] = useState<'list' | 'favorites'>('list')
   const [searchTerm, setSearchTerm] = useState('')
-  const [favoritesOnly, setFavoritesOnly] = useState(false)
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [detailList, setDetailList] = useState<HanziItem[]>([])
   const [detailIndex, setDetailIndex] = useState(0)
 
   const normalizedQuery = searchTerm.trim().toLowerCase()
-  const favoritesFilterOn = view === 'favorites' ? true : favoritesOnly
+  const favoritesFilterOn = view === 'favorites'
 
   const scopedItems = useMemo(() => {
     return items.filter((item) => {
@@ -69,14 +67,11 @@ const App = () => {
   const detailItem = detailList[detailIndex]
 
   return (
-    <div className="safe-area min-h-screen bg-slate-50 px-6 pb-16 pt-6 text-slate-900 dark:bg-slate-950 dark:text-slate-50 sm:px-8">
+    <div className="safe-area m-4 min-h-screen bg-slate-50 px-6 pb-16 pt-6 text-slate-900 dark:bg-slate-950 dark:text-slate-50 sm:m-6 sm:px-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
         <header className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-semibold">Hanzi Journey</h1>
-            <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-              {favoriteIds.size} favorites
-            </span>
           </div>
           <OfflineBadge isOnline={isOnline} isUsingCache={isUsingCache} />
           <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -98,7 +93,9 @@ const App = () => {
                     : 'text-slate-500 dark:text-slate-400'
                 }`}
               >
-                {tab === 'list' ? 'All' : 'Favorites'}
+                {tab === 'list'
+                  ? 'All'
+                  : `Favorites (${favoriteIds.size})`}
               </button>
             ))}
           </div>
@@ -118,14 +115,6 @@ const App = () => {
         ) : (
           <>
             <SearchBar value={searchTerm} onChange={setSearchTerm} />
-            {view === 'list' && (
-              <Toggle
-                label="Favorites only"
-                checked={favoritesOnly}
-                onChange={setFavoritesOnly}
-              />
-            )}
-
             {isLoading && items.length === 0 && (
               <div className="rounded-2xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
                 Loading Hanzi…
