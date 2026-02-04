@@ -67,7 +67,7 @@ const App = () => {
   const detailItem = detailList[detailIndex]
 
   return (
-    <div className="safe-area m-4 min-h-screen bg-slate-50 px-6 pb-16 pt-6 text-slate-900 dark:bg-slate-950 dark:text-slate-50 sm:m-6 sm:px-8">
+    <div className="safe-area m-4 min-h-screen bg-gradient-to-b from-sky-50 via-slate-50 to-slate-50 px-6 pb-16 pt-6 text-slate-900 dark:from-slate-950 dark:via-slate-950 dark:to-slate-950 dark:text-slate-50 sm:m-6 sm:px-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
         <header className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
@@ -89,7 +89,7 @@ const App = () => {
                 onClick={() => setView(tab)}
                 className={`flex-1 rounded-2xl px-4 py-2 text-sm font-semibold ${
                   view === tab
-                    ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                    ? 'bg-rose-600 text-white dark:bg-rose-500 dark:text-white'
                     : 'text-slate-500 dark:text-slate-400'
                 }`}
               >
