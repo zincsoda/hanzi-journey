@@ -23,3 +23,4 @@ const SearchBar = ({ value, onChange }: SearchBarProps) => {
 
 export default SearchBar
 
+

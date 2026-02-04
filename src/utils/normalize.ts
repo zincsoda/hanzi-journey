@@ -17,3 +17,4 @@ export const normalizeRow = (row: ApiRow, index: number): HanziItem => {
   }
 }
 
+

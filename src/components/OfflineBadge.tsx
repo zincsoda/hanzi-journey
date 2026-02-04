@@ -20,3 +20,4 @@ const OfflineBadge = ({ isOnline, isUsingCache }: OfflineBadgeProps) => {
 
 export default OfflineBadge
 
+
