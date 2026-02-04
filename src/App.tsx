@@ -94,7 +94,7 @@ const App = () => {
                 }`}
               >
                 {tab === 'list'
-                  ? 'All'
+                  ? `All (${items.length})`
                   : `Favorites (${favoriteIds.size})`}
               </button>
             ))}
