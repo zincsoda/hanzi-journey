@@ -1,4 +1,5 @@
 import type { HanziItem } from '../types'
+import HanziImage from './HanziImage'
 
 type DetailViewProps = {
   item: HanziItem
@@ -50,6 +51,11 @@ const DetailView = ({
           {item.pinyin || '—'}
         </div>
         <div className="mt-4 text-lg">{item.meaning || 'No meaning yet'}</div>
+        <HanziImage
+          hanzi={item.hanzi}
+          showPlaceholder
+          className="mt-6 w-full rounded-2xl border border-slate-200 object-contain dark:border-slate-700"
+        />
       </div>
 
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
