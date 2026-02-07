@@ -18,11 +18,13 @@ export const useHanziData = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isUsingCache, setIsUsingCache] = useState(false)
+  const [lastSyncAt, setLastSyncAt] = useState<string | null>(null)
 
   useEffect(() => {
     const cache = loadJson<CachePayload | null>(CACHE_KEY, null)
     if (cache?.items?.length) {
       setItems(cache.items)
+      setLastSyncAt(cache.fetchedAt)
     }
 
     const fetchData = async () => {
@@ -40,15 +42,18 @@ export const useHanziData = () => {
         }
         const normalized = data.map((row, index) => normalizeRow(row, index))
         setItems(normalized)
+        const fetchedAt = new Date().toISOString()
+        setLastSyncAt(fetchedAt)
         saveJson<CachePayload>(CACHE_KEY, {
           items: normalized,
-          fetchedAt: new Date().toISOString()
+          fetchedAt
         })
       } catch (fetchError) {
         const cached = loadJson<CachePayload | null>(CACHE_KEY, null)
         if (cached?.items?.length) {
           setItems(cached.items)
           setIsUsingCache(true)
+          setLastSyncAt(cached.fetchedAt)
         }
         setError(
           fetchError instanceof Error ? fetchError.message : 'Fetch failed'
@@ -65,7 +70,8 @@ export const useHanziData = () => {
     items,
     isLoading,
     error,
-    isUsingCache
+    isUsingCache,
+    lastSyncAt
   }
 }
 

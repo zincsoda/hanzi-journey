@@ -13,7 +13,7 @@ const PAGE_SIZE = 50
 type View = 'list' | 'favorites' | 'detail'
 
 const App = () => {
-  const { items, isLoading, error, isUsingCache } = useHanziData()
+  const { items, isLoading, error, isUsingCache, lastSyncAt } = useHanziData()
   const { favoriteIds, toggleFavorite, isFavorite } = useFavorites()
   const isOnline = useOnlineStatus()
   const [view, setView] = useState<View>('list')
@@ -43,13 +43,7 @@ const App = () => {
   const visibleItems = scopedItems.slice(0, visibleCount)
   const canLoadMore = visibleCount < scopedItems.length
   const imageCount = useMemo(() => {
-    return items.filter((item) => {
-      const raw = item.image?.trim().toLowerCase() ?? ''
-      if (!raw) {
-        return false
-      }
-      return !['0', 'false', 'no', 'n/a', 'na', 'none', '-'].includes(raw)
-    }).length
+    return items.filter((item) => item.hasImage).length
   }, [items])
 
   useEffect(() => {
@@ -94,14 +88,12 @@ const App = () => {
           {showStats && (
             <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
               <div className="flex flex-wrap gap-x-4 gap-y-2">
-                <span>Total Hanzi: {items.length}</span>
-                <span>Favorites: {favoriteIds.size}</span>
                 <span>With image: {imageCount}</span>
-                <span>Matching: {scopedItems.length}</span>
-                <span>Visible: {Math.min(visibleCount, scopedItems.length)}</span>
-                <span>View: {view === 'favorites' ? 'Favorites' : view === 'detail' ? 'Detail' : 'All'}</span>
                 <span>Status: {isOnline ? 'Online' : 'Offline'}</span>
-                {isUsingCache && <span>Cache: Active</span>}
+                <span>
+                  Last sync:{' '}
+                  {lastSyncAt ? new Date(lastSyncAt).toLocaleString() : '—'}
+                </span>
               </div>
             </div>
           )}

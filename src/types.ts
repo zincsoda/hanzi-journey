@@ -3,6 +3,7 @@ export type ApiRow = {
   Hanzi?: string
   Meaning?: string
   Image?: string
+  'Has Image'?: string
   Description?: string
 }
 
@@ -13,6 +14,7 @@ export type HanziItem = {
   meaning: string
   mnemonic: string
   image?: string
+  hasImage: boolean
 }
 
 

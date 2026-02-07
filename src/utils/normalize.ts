@@ -6,6 +6,7 @@ export const normalizeRow = (row: ApiRow, index: number): HanziItem => {
   const meaning = row.Meaning?.trim() ?? ''
   const mnemonic = row.Description?.trim() ?? ''
   const image = row.Image?.trim() ?? ''
+  const hasImage = (row['Has Image']?.trim() ?? '').toLowerCase() === 'yes'
 
   return {
     id: `${hanzi}-${pinyin}-${index}`,
@@ -13,7 +14,8 @@ export const normalizeRow = (row: ApiRow, index: number): HanziItem => {
     pinyin,
     meaning,
     mnemonic,
-    image: image || undefined
+    image: image || undefined,
+    hasImage
   }
 }
 
