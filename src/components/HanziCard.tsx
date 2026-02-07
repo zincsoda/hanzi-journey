@@ -1,5 +1,4 @@
 import type { HanziItem } from '../types'
-import HanziImage from './HanziImage'
 
 type HanziCardProps = {
   item: HanziItem
@@ -27,19 +26,13 @@ const HanziCard = ({
       }}
       className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:border-slate-800 dark:bg-slate-900"
     >
-      <div className="flex items-center gap-4">
-        <HanziImage
-          hanzi={item.hanzi}
-          className="h-16 w-16 rounded-2xl border border-slate-200 object-cover dark:border-slate-700"
-        />
-        <div>
-          <div className="text-3xl font-semibold">{item.hanzi || '—'}</div>
-          <div className="text-sm uppercase tracking-wide text-slate-500 dark:text-slate-400">
-            {item.pinyin || '—'}
-          </div>
-          <div className="text-sm text-slate-600 dark:text-slate-300">
-            {item.meaning || 'No meaning yet'}
-          </div>
+      <div>
+        <div className="text-3xl font-semibold">{item.hanzi || '—'}</div>
+        <div className="text-sm uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          {item.pinyin || '—'}
+        </div>
+        <div className="text-sm text-slate-600 dark:text-slate-300">
+          {item.meaning || 'No meaning yet'}
         </div>
       </div>
       <button

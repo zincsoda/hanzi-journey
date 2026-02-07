@@ -22,6 +22,7 @@ const App = () => {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [detailList, setDetailList] = useState<HanziItem[]>([])
   const [detailIndex, setDetailIndex] = useState(0)
+  const [showStats, setShowStats] = useState(false)
 
   const normalizedQuery = searchTerm.trim().toLowerCase()
   const favoritesFilterOn = view === 'favorites'
@@ -41,6 +42,15 @@ const App = () => {
 
   const visibleItems = scopedItems.slice(0, visibleCount)
   const canLoadMore = visibleCount < scopedItems.length
+  const imageCount = useMemo(() => {
+    return items.filter((item) => {
+      const raw = item.image?.trim().toLowerCase() ?? ''
+      if (!raw) {
+        return false
+      }
+      return !['0', 'false', 'no', 'n/a', 'na', 'none', '-'].includes(raw)
+    }).length
+  }, [items])
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE)
@@ -72,8 +82,29 @@ const App = () => {
         <header className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-semibold">Hanzi Journey</h1>
+            <button
+              type="button"
+              onClick={() => setShowStats((value) => !value)}
+              className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-slate-100"
+            >
+              {showStats ? 'Hide stats' : 'Stats'}
+            </button>
           </div>
           <OfflineBadge isOnline={isOnline} isUsingCache={isUsingCache} />
+          {showStats && (
+            <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
+                <span>Total Hanzi: {items.length}</span>
+                <span>Favorites: {favoriteIds.size}</span>
+                <span>With image: {imageCount}</span>
+                <span>Matching: {scopedItems.length}</span>
+                <span>Visible: {Math.min(visibleCount, scopedItems.length)}</span>
+                <span>View: {view === 'favorites' ? 'Favorites' : view === 'detail' ? 'Detail' : 'All'}</span>
+                <span>Status: {isOnline ? 'Online' : 'Offline'}</span>
+                {isUsingCache && <span>Cache: Active</span>}
+              </div>
+            </div>
+          )}
           <p className="text-sm text-slate-500 dark:text-slate-400">
             Learn Hanzi with mnemonics and quick swipes. Add this app to your
             Home Screen for offline practice.
