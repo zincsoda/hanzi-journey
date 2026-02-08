@@ -7,10 +7,12 @@ type DetailViewProps = {
   isFavorite: boolean
   onToggleFavorite: () => void
   onBack: () => void
+  onRandom: () => void
   onNext: () => void
   onPrev: () => void
   hasNext: boolean
   hasPrev: boolean
+  hasRandom: boolean
 }
 
 const DetailView = ({
@@ -18,10 +20,12 @@ const DetailView = ({
   isFavorite,
   onToggleFavorite,
   onBack,
+  onRandom,
   onNext,
   onPrev,
   hasNext,
-  hasPrev
+  hasPrev,
+  hasRandom
 }: DetailViewProps) => {
   const [zoomSrc, setZoomSrc] = useState<string | null>(null)
 
@@ -50,7 +54,10 @@ const DetailView = ({
   }, [zoomSrc])
 
   return (
-    <section className="flex flex-col gap-6">
+    <section
+      className="flex flex-col gap-6"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 40px)' }}
+    >
       <div className="flex items-center justify-between">
         <button
           type="button"
@@ -106,6 +113,14 @@ const DetailView = ({
         </button>
         <button
           type="button"
+          onClick={onRandom}
+          disabled={!hasRandom}
+          className="flex-1 rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold shadow-sm disabled:opacity-50 dark:border-slate-700"
+        >
+          Random
+        </button>
+        <button
+          type="button"
           onClick={onNext}
           disabled={!hasNext}
           className="flex-1 rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold shadow-sm disabled:opacity-50 dark:border-slate-700"
@@ -119,7 +134,6 @@ const DetailView = ({
           role="dialog"
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4"
-          style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 52px)' }}
           onClick={(event) => {
             if (event.target === event.currentTarget) {
               setZoomSrc(null)
@@ -129,7 +143,8 @@ const DetailView = ({
           <button
             type="button"
             onClick={() => setZoomSrc(null)}
-            className="absolute right-5 top-8 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm"
+            className="absolute right-5 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm"
+            style={{ top: 'calc(env(safe-area-inset-top, 0px) + 56px)' }}
           >
             Close
           </button>

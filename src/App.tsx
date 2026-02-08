@@ -70,6 +70,19 @@ const App = () => {
   }
 
   const detailItem = detailList[detailIndex]
+  const hasRandom = detailList.length > 1
+  const handleRandom = () => {
+    if (detailList.length <= 1) {
+      return
+    }
+    setDetailIndex((currentIndex) => {
+      let nextIndex = currentIndex
+      while (nextIndex === currentIndex) {
+        nextIndex = Math.floor(Math.random() * detailList.length)
+      }
+      return nextIndex
+    })
+  }
 
   return (
     <div className="safe-area m-4 min-h-screen bg-gradient-to-b from-sky-50 via-slate-50 to-slate-50 px-6 pb-16 pt-6 text-slate-900 dark:from-slate-950 dark:via-slate-950 dark:to-slate-950 dark:text-slate-50 sm:m-6 sm:px-8">
@@ -145,10 +158,12 @@ const App = () => {
             isFavorite={isFavorite(detailItem.id)}
             onToggleFavorite={() => toggleFavorite(detailItem.id)}
             onBack={() => setView(returnView)}
+            onRandom={handleRandom}
             onNext={() => setDetailIndex((index) => index + 1)}
             onPrev={() => setDetailIndex((index) => index - 1)}
             hasNext={detailIndex < detailList.length - 1}
             hasPrev={detailIndex > 0}
+            hasRandom={hasRandom}
           />
         ) : (
           <>
