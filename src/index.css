@@ -12,6 +12,15 @@ body {
     sans-serif;
 }
 
+input[type='search'] {
+  -webkit-appearance: searchfield;
+  appearance: searchfield;
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: searchfield-cancel-button;
+}
+
 .safe-area {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
