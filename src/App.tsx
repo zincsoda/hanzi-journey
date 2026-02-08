@@ -80,9 +80,22 @@ const App = () => {
             <button
               type="button"
               onClick={() => setShowStats((value) => !value)}
-              className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-slate-100"
+              aria-label={showStats ? 'Hide stats' : 'Show stats'}
+              title={showStats ? 'Hide stats' : 'Show stats'}
+              className="rounded-full border border-slate-200 p-2 text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-slate-100"
             >
-              {showStats ? 'Hide stats' : 'Stats'}
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                className="h-4 w-4"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-11.5a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V6.5zm0 4a.75.75 0 011.5 0v4a.75.75 0 01-1.5 0v-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </button>
           </div>
           <OfflineBadge isOnline={isOnline} isUsingCache={isUsingCache} />
