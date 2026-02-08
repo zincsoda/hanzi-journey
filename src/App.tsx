@@ -22,6 +22,7 @@ const App = () => {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [detailList, setDetailList] = useState<HanziItem[]>([])
   const [detailIndex, setDetailIndex] = useState(0)
+  const [pendingScrollId, setPendingScrollId] = useState<string | null>(null)
   const [showStats, setShowStats] = useState(false)
 
   const normalizedQuery = searchTerm.trim().toLowerCase()
@@ -57,8 +58,31 @@ const App = () => {
     }
   }, [detailList.length, view])
 
-  const openDetail = (id: string) => {
-    const list = scopedItems
+  useEffect(() => {
+    if (view === 'detail' || !pendingScrollId) {
+      return
+    }
+
+    const index = scopedItems.findIndex((item) => item.id === pendingScrollId)
+    if (index === -1) {
+      setPendingScrollId(null)
+      return
+    }
+
+    if (visibleCount < index + 1) {
+      setVisibleCount((count) => Math.max(count, index + 1))
+      return
+    }
+
+    requestAnimationFrame(() => {
+      const target = document.getElementById(`hanzi-${pendingScrollId}`)
+      target?.scrollIntoView({ block: 'center' })
+    })
+    setPendingScrollId(null)
+  }, [pendingScrollId, scopedItems, view, visibleCount])
+
+  const openDetail = (id: string, listOverride?: HanziItem[]) => {
+    const list = listOverride ?? scopedItems
     const index = list.findIndex((item) => item.id === id)
     if (index === -1) {
       return
@@ -67,6 +91,18 @@ const App = () => {
     setDetailIndex(index)
     setReturnView(view === 'favorites' ? 'favorites' : 'list')
     setView('detail')
+  }
+
+  const handleRandomFromHeader = () => {
+    if (scopedItems.length === 0) {
+      return
+    }
+    const randomIndex = Math.floor(Math.random() * scopedItems.length)
+    const randomItem = scopedItems[randomIndex]
+    if (!randomItem) {
+      return
+    }
+    openDetail(randomItem.id, scopedItems)
   }
 
   const detailItem = detailList[detailIndex]
@@ -84,32 +120,57 @@ const App = () => {
     })
   }
 
+  const handleBack = () => {
+    if (detailItem) {
+      setPendingScrollId(detailItem.id)
+    }
+    setView(returnView)
+  }
+
   return (
     <div className="safe-area m-4 min-h-screen bg-gradient-to-b from-sky-50 via-slate-50 to-slate-50 px-6 pb-16 pt-6 text-slate-900 dark:from-slate-950 dark:via-slate-950 dark:to-slate-950 dark:text-slate-50 sm:m-6 sm:px-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
         <header className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-semibold">Hanzi Journey</h1>
-            <button
-              type="button"
-              onClick={() => setShowStats((value) => !value)}
-              aria-label={showStats ? 'Hide stats' : 'Show stats'}
-              title={showStats ? 'Hide stats' : 'Show stats'}
-              className="rounded-full border border-slate-200 p-2 text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-slate-100"
-            >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 20 20"
-                className="h-4 w-4"
-                fill="currentColor"
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleRandomFromHeader}
+                aria-label="Random hanzi"
+                title="Random hanzi"
+                className="rounded-full border border-slate-200 p-2 text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-slate-100"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-11.5a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V6.5zm0 4a.75.75 0 011.5 0v4a.75.75 0 01-1.5 0v-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  className="h-4 w-4"
+                  fill="currentColor"
+                >
+                  <path d="M4 4h4a1 1 0 010 2H6.414l2.793 2.793a1 1 0 11-1.414 1.414L5 7.414V9a1 1 0 11-2 0V5a1 1 0 011-1zm12 12h-4a1 1 0 010-2h1.586l-2.793-2.793a1 1 0 111.414-1.414L15 12.586V11a1 1 0 112 0v4a1 1 0 01-1 1z" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowStats((value) => !value)}
+                aria-label={showStats ? 'Hide stats' : 'Show stats'}
+                title={showStats ? 'Hide stats' : 'Show stats'}
+                className="rounded-full border border-slate-200 p-2 text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-slate-100"
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  className="h-4 w-4"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-11.5a.75.75 0 011.5 0v.75a.75.75 0 01-1.5 0V6.5zm0 4a.75.75 0 011.5 0v4a.75.75 0 01-1.5 0v-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
           <OfflineBadge isOnline={isOnline} isUsingCache={isUsingCache} />
           {showStats && (
@@ -125,10 +186,6 @@ const App = () => {
               </div>
             </div>
           )}
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Learn Hanzi with mnemonics and quick swipes. Add this app to your
-            Home Screen for offline practice.
-          </p>
         </header>
 
         {view !== 'detail' && (
@@ -157,7 +214,7 @@ const App = () => {
             item={detailItem}
             isFavorite={isFavorite(detailItem.id)}
             onToggleFavorite={() => toggleFavorite(detailItem.id)}
-            onBack={() => setView(returnView)}
+            onBack={handleBack}
             onRandom={handleRandom}
             onNext={() => setDetailIndex((index) => index + 1)}
             onPrev={() => setDetailIndex((index) => index - 1)}

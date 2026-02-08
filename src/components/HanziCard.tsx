@@ -15,6 +15,7 @@ const HanziCard = ({
 }: HanziCardProps) => {
   return (
     <div
+      id={`hanzi-${item.id}`}
       role="button"
       tabIndex={0}
       onClick={onSelect}
