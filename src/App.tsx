@@ -45,6 +45,7 @@ const App = () => {
   const imageCount = useMemo(() => {
     return items.filter((item) => item.hasImage).length
   }, [items])
+  const buildNumber = __BUILD_NUMBER__ || '0'
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE)
@@ -89,6 +90,7 @@ const App = () => {
             <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
               <div className="flex flex-wrap gap-x-4 gap-y-2">
                 <span>With image: {imageCount}</span>
+                <span>Build: {buildNumber}</span>
                 <span>Status: {isOnline ? 'Online' : 'Offline'}</span>
                 <span>
                   Last sync:{' '}

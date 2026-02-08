@@ -1,9 +1,24 @@
+import { execSync } from 'node:child_process'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
+const getBuildNumber = () => {
+  try {
+    return execSync('git rev-list --count HEAD').toString().trim()
+  } catch (error) {
+    console.warn('Unable to read git commit count.', error)
+    return '0'
+  }
+}
+
+const buildNumber = getBuildNumber()
+
 export default defineConfig({
   base: '/hanzi-journey/',
+  define: {
+    __BUILD_NUMBER__: JSON.stringify(buildNumber)
+  },
   plugins: [
     react(),
     VitePWA({
