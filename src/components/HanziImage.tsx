@@ -10,13 +10,15 @@ type HanziImageProps = {
   alt?: string
   className?: string
   showPlaceholder?: boolean
+  onImageClick?: (src: string) => void
 }
 
 const HanziImage = ({
   hanzi,
   alt,
   className = '',
-  showPlaceholder = false
+  showPlaceholder = false,
+  onImageClick
 }: HanziImageProps) => {
   const trimmed = useMemo(() => hanzi.trim(), [hanzi])
   const [src, setSrc] = useState<string | null>(null)
@@ -51,6 +53,19 @@ const HanziImage = ({
       alt={alt ?? `Illustration for ${trimmed}`}
       className={className}
       loading="lazy"
+      role={onImageClick ? 'button' : undefined}
+      tabIndex={onImageClick ? 0 : undefined}
+      onClick={onImageClick ? () => onImageClick(src) : undefined}
+      onKeyDown={
+        onImageClick
+          ? (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                onImageClick(src)
+              }
+            }
+          : undefined
+      }
       onError={() => {
         if (!didTryJpeg) {
           setDidTryJpeg(true)
