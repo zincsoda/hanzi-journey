@@ -38,6 +38,9 @@ logs
 .cache/
 .parcel-cache/
 .eslintcache
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
 
 # PWA cache
 dev-dist/
