@@ -119,6 +119,7 @@ const DetailView = ({
           role="dialog"
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4"
+          style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 52px)' }}
           onClick={(event) => {
             if (event.target === event.currentTarget) {
               setZoomSrc(null)
@@ -128,7 +129,7 @@ const DetailView = ({
           <button
             type="button"
             onClick={() => setZoomSrc(null)}
-            className="absolute right-5 top-5 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm"
+            className="absolute right-5 top-8 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm"
           >
             Close
           </button>
